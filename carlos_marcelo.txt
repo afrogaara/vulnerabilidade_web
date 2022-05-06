@@ -1,0 +1,56 @@
+			Cliente	<-----	Servidor 
+		HTML é "renderizado" pelo navegador.   
+             navegador <------- servidor 
+	     Controla requisições(request)
+	     Controla as respostas(response)  
+https -p 443
+http -p 80 
+
+- >web application existe o server side e o client side e existe vulnerabilidades 
+injection para os dois.
+
+- > Broken Authentication ( brutalforce, cookies roubados, http (sem criptografia)
+sqlinjection ( roubos de senhas e usuarios )
+contramedida -- > salvar senhas em hashing 
+
+- > XXE "não filtrar o xxe no parsing do xml" ( ver um video depois ) 
+
+- > broken acess Control (controle de acesso), ex: deletar fotos de outros usuarios em uma rede social 
+você faz referencia direta a um outro objeto e ele é executado no server side. 
+( controle de permissão ) 
+
+- > Security Miscofiguratior má configuração 
+
+- > XSS injetar codigo html, javascript, roubar cookies da vitima, phishing 
+
+- > Insecure Deserialization conversão de objeto para bytes e bytes para objeto 
+se feita de forma insegura, permite injeção de código
+
+- > insufficient logginemonitorin falta de politicas de segurança 
+firewall, ids, ips...   
+
+
+Plugins - > complemento do navegador. O navegador vem com certas "bibliotecas" 
+que são padrões. Os plugins é um complemento adicional do navegador.  
+ex: 1) web socket API. Conexão entre o navegador e o servidor. 
+    2) ActiveX API. Criada pela Microsoft para proporcionar que uma aplicação 
+tenha alto nivel de privilegio no computador cliente possibilitando a leitura 
+de dispositivos USB.
+    3) Adobe Flash Player, Acrobat Reader 
+
+
+Política de mesma Origem: 
+-- > PMO. É uma tecnica de isolamento que consiste: 1 protocolo, 1 endereço de dominio, 1 porta.
+Serve para controlar dados que trafegam entre dominios distinto no mesmo navegador. 
+Apesar de ter 2 abas abertas no computador elas não se comunicam entre si. 
+
+
+Proxy: 
+CLIENTE     ---------------> PROXY ---------------------> SERVIDOR 
+	NAVEGADOR              TRÁFEGO                     
+
+--> Você permite que um serviço terceiro ( proxy ) controle seu trafego. 
+	-> Quem fará o request é o proxy. Quem recebe o response é o proxy.
+	-> o Servidor pode filtrar ou não essa requisição feita pelo proxy
+	uma vez que é um serviço terceiro.
+
