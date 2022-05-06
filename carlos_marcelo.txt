@@ -1,50 +1,94 @@
-			Cliente	<-----	Servidor 
-		HTML é "renderizado" pelo navegador.   
-             navegador <------- servidor 
-	     Controla requisições(request)
-	     Controla as respostas(response)  
+		                          Cliente <----- Servidor 
+	                            HTML é "renderizado" pelo navegador.   
+                                        navegador <------- servidor 
+	         O navegador: 
+	Controla requisições(request)
+	Controla as respostas(response)  
+
 https -p 443
 http -p 80 
 
---> web application existe o server side e o client side e existe vulnerabilidades 
+---- > web application existe o server side e o client side e existe vulnerabilidades 
 injection para os dois. Injeção de Códigos 
-------> ( Cross-site Scripting XSS ) 
-------> ( Injeção SQL )
+----- > ( Cross-site Scripting XSS ) 
+   
+  -- > Utiliza o JS do navegador e permite que o atacante ( executor ) envie dados não confiáveis para o servidor.
+  isso acontece por falta de validação de dados na entrada, o navegador acaba permitindo a execussão do código malicioso.<--
+  -- > parâmetros de uma URL são alterados para um código malicioso e encaminha para a vítima. O navegador no computador da 	vítima interpreterá os códigos injetados. 
+	
+	ex: http://www.meuforum.com/?p=abc
+	URL cm codigo malicioso: http://www.meuforum.com/?p=<img src='codigomalicioso.jpg' onError=alert("XSS"):>
+		*nesse caso, não há uma validação nos valores atribuídos ao parâmetro "p".* 
+
+3 tipos de XSS:
+   --- >> 1) Persistente.
+   --- >> Vai acontecer no formulário ( onde acontece a conexão da API cliente-servidor ) a inserção de código 		malicioso que fará uma requisição ao banco de dados ( servidor ) que trará resultado ( persiste ) e pode ser 	     retornando um valor ( recuperado por qualquer usuário da aplicação ). 
+	--- >> exemplo do livro: 	
+		<script>alert("XSS");</script>
+Consequências:
+	-- > a consequência mais crítica do xss é o roubo de cookies para logar na sessão do usuário.
+		ex para pesquisar: Samy Kankar 
+	contramedida do navegador para injeção de código XSS:
+		-- > Content Security Policy (CSP) diz respeito quais parametros são permitidos ou não para serem processados em uma requisição. O desenvolvedor do site pode restrinjir os parâmetros que serão utilizados em uma determinada pagina na sua URL. 
+	
+1) Forma direta: 
+	exemplo: 
+		<b>Title</b>
+	técnica de Escape: 
+		"&ltb&gtTeste&lt/b&gt"
+		
+--- >> Técnicas de defesa: << ---
+	1 ) -- utilização de regras de segurança ou um IPS que fará uma audiotira no código, interceptando as requisições antes do response do servidor. 
+
+	2 ) -- Proxy reverso. 
+	cliente -------------- >> proxy reverso ------------- >> internet -------------------- >> servidor  
+		-- > as requisições do cliente seram interceptadas pelo proxy que irá aplicar um conjunto de técnicas e depois passadas a internet.
+			 
+	3 ) -- Dynamic Data Tainting 
+	
+	cliente --------------- >> internet ---------------- >> servidor
+	cliente << --------------- internet << ---------------- servidor 
+	------>	Durante a renderização da página no navegador do cliente, acontecerá o monitoramento de código JavaScript, e 
+	possibilitanto uma resposta de execução ou não de um determinado processamento. ( É uma técnica boa quando utilizada em conjunto com outras regras de análise como a utilização de um IPS.  			
+
+--> ( Injeção SQL )
 * São falhas em dados de formulários. 
 
-
-- > Broken Authentication ( brutalforce, cookies roubados, http (sem criptografia)
+-- > Broken Authentication ( brutalforce, cookies roubados, http (sem criptografia)
 sqlinjection ( roubos de senhas e usuarios )
 contramedida -- > salvar senhas em hashing 
 
-- > XXE "não filtrar o xxe no parsing do xml" ( ver um video depois ) 
+-- > XXE "não filtrar o xxe no parsing do xml"
 
-- > broken acess Control (controle de acesso), ex: deletar fotos de outros usuarios em uma rede social 
+-- > broken acess Control (controle de acesso), ex: deletar fotos de outros usuarios em uma rede social 
 você faz referencia direta a um outro objeto e ele é executado no server side. 
 ( controle de permissão ) 
 
-- > Security Miscofiguratior má configuração 
+-- > Security Miscofiguratior má configuração 
 
-- > XSS injetar codigo html, javascript, roubar cookies da vitima, phishing,
+-- > XSS injetar codigo html, javascript, roubar cookies da vitima, phishing,
 engenharia social. 
 
 
-- > Insecure Deserialization conversão de objeto para bytes e bytes para objeto 
+-- > Insecure Deserialization conversão de objeto para bytes e bytes para objeto 
 se feita de forma insegura, permite injeção de código
 
-		----->>Fraca proteção aos dados<<----- 
-- > insufficient logginemonitorin falta de politicas de segurança 
-firewall, ids, ips, criptografia, utilização de http, falta de ofuscação de dados.
+			----->>Fraca proteção aos dados<<------  
+	-- > insufficient logginemonitorin falta de politicas de segurança 
+	firewall, ids, ips, criptografia, utilização de http, falta de ofuscação de dados.
    
+	-->> Componentes ( que complementa a biblioteca do google ) 
+	--> Falha no desenvolvimento do navegador. Ou a importação de plugisn e extensões maliciosas.
+	--> procurar plugins e extensões maliciosas.
 
-
-Plugins - > complemento do navegador. O navegador vem com certas "bibliotecas" 
-que são padrões. Os plugins é um complemento adicional do navegador.  
-ex: 1) web socket API. Conexão entre o navegador e o servidor. 
-    2) ActiveX API. Criada pela Microsoft para proporcionar que uma aplicação 
-tenha alto nivel de privilegio no computador cliente possibilitando a leitura 
-de dispositivos USB.
-    3) Adobe Flash Player, Acrobat Reader 
+	Plugins - > complemento do navegador. O navegador vem com certas "bibliotecas" 
+	que são padrões. Os plugins é um complemento adicional do navegador.  
+	ex: 
+	1) web socket API. Conexão entre o navegador e o servidor. 
+    	2) ActiveX API. Criada pela Microsoft para proporcionar que uma aplicação 
+	tenha alto nivel de privilegio no computador cliente possibilitando a leitura 
+	de dispositivos USB.
+    	3) Adobe Flash Player, Acrobat Reader 
 
 
 Política de mesma Origem: 
@@ -54,8 +98,9 @@ Apesar de ter 2 abas abertas no computador elas não se comunicam entre si.
 
 
 Proxy: 
-CLIENTE     ---------------> PROXY ---------------------> SERVIDOR 
-	NAVEGADOR              TRÁFEGO                     
+
+	CLIENTE     --------------- > PROXY --------------------- > SERVIDOR 
+		NAVEGADOR            TRÁFEGO          	cliente, ip_port_cliente = servidor.accept()
 
 --> Você permite que um serviço terceiro ( proxy ) controle seu trafego. 
 	-> Quem fará o request é o proxy. Quem recebe o response é o proxy.
@@ -72,19 +117,19 @@ do usuário e assim o cliente não necessitar fazer autenticação na em javascr
 quando a pagina é relogada ou fechada. Essa autenticação serve para saber se 
 o usuário está usando navegador. 
 
--- ex : Navegadores configurados para preservar o estado da sessão confere um risco 
+	-- exemplo : Navegadores configurados para preservar o estado da sessão confere um risco 
 de dados sensíveis quando o computador é publico.
 
---Contramedida: O responsável pela aplicação do serviço poderia ter alguma medida 
+	-- Contramedida: O responsável pela aplicação do serviço poderia ter alguma medida 
 de alerta que avisasse ao usuario para fazer o logout da sua conta   
---navegador poderia ter uma extensão que alertasse ao usuario para fazer o logout
+	--navegador poderia ter uma extensão que alertasse ao usuario para fazer o logout
 da sua conta. 
---Por que não poderia fazer que o cookie desconectasse da sessão sempre ao sair?--
+	--Por que não poderia fazer que o cookie desconectasse da sessão sempre ao sair?--
 	- pq essa é a função do cookie. Ser funcional e prático com menor intervenção 
 do usuário comum possivel. 
 
 --> Cache: automação para processos mais frequentes no navegador. 
-	Ex: uma informação repetida, uma requisição repetida como o carregamento de ppaginas. 
+	Ex: uma informação repetida, uma requisição repetida, carregamento de paginas... 
 
 
 
