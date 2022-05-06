@@ -6,8 +6,12 @@
 https -p 443
 http -p 80 
 
-- >web application existe o server side e o client side e existe vulnerabilidades 
-injection para os dois.
+--> web application existe o server side e o client side e existe vulnerabilidades 
+injection para os dois. Injeção de Códigos 
+------> ( Cross-site Scripting XSS ) 
+------> ( Injeção SQL )
+* São falhas em dados de formulários. 
+
 
 - > Broken Authentication ( brutalforce, cookies roubados, http (sem criptografia)
 sqlinjection ( roubos de senhas e usuarios )
@@ -21,13 +25,17 @@ você faz referencia direta a um outro objeto e ele é executado no server side.
 
 - > Security Miscofiguratior má configuração 
 
-- > XSS injetar codigo html, javascript, roubar cookies da vitima, phishing 
+- > XSS injetar codigo html, javascript, roubar cookies da vitima, phishing,
+engenharia social. 
+
 
 - > Insecure Deserialization conversão de objeto para bytes e bytes para objeto 
 se feita de forma insegura, permite injeção de código
 
+		----->>Fraca proteção aos dados<<----- 
 - > insufficient logginemonitorin falta de politicas de segurança 
-firewall, ids, ips...   
+firewall, ids, ips, criptografia, utilização de http, falta de ofuscação de dados.
+   
 
 
 Plugins - > complemento do navegador. O navegador vem com certas "bibliotecas" 
@@ -53,4 +61,34 @@ CLIENTE     ---------------> PROXY ---------------------> SERVIDOR
 	-> Quem fará o request é o proxy. Quem recebe o response é o proxy.
 	-> o Servidor pode filtrar ou não essa requisição feita pelo proxy
 	uma vez que é um serviço terceiro.
+
+-- burpsuit é um proxy. Você faz a requisição e a requisição passa pelo.
+-- burp também altera a resposta do servidor para a maquina.
+
+--> Sandbox é uma politica de segurança. Testa, Execura e bloqueia. 
+
+--> Cookies: São armazenados no navegador do cliente. São responsaveis por manter a sessão 
+do usuário e assim o cliente não necessitar fazer autenticação na em javascript 
+quando a pagina é relogada ou fechada. Essa autenticação serve para saber se 
+o usuário está usando navegador. 
+
+-- ex : Navegadores configurados para preservar o estado da sessão confere um risco 
+de dados sensíveis quando o computador é publico.
+
+--Contramedida: O responsável pela aplicação do serviço poderia ter alguma medida 
+de alerta que avisasse ao usuario para fazer o logout da sua conta   
+--navegador poderia ter uma extensão que alertasse ao usuario para fazer o logout
+da sua conta. 
+--Por que não poderia fazer que o cookie desconectasse da sessão sempre ao sair?--
+	- pq essa é a função do cookie. Ser funcional e prático com menor intervenção 
+do usuário comum possivel. 
+
+--> Cache: automação para processos mais frequentes no navegador. 
+	Ex: uma informação repetida, uma requisição repetida como o carregamento de ppaginas. 
+
+
+
+https://owasp.org/
+https://owasp.org/www-pdf-archive/OWASP_Top_10-2017-pt_pt.pdf
+https://www.sans.org/top25-software-errors/
 
