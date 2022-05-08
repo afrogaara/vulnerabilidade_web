@@ -1,0 +1,80 @@
+Política de mesma Origem: 
+
+-- > PMO. É uma tecnica de isolamento que consiste no uso de: 1 protocolo, 1 endereço de dominio, 1 porta.
+Serve para controlar dados que trafegam entre dominios distinto no mesmo navegador. 
+Apesar de ter 2 abas abertas no computador elas não se comunicam entre si. 
+
+--> Cookies: São armazenados no navegador do cliente. São responsaveis por manter a sessão 
+do usuário e assim o cliente não necessitar fazer autenticação na em javascript 
+quando a pagina é relogada ou fechada. Essa autenticação serve para saber se 
+o usuário está usando navegador. 
+
+	-- exemplo : Navegadores configurados para preservar o estado da sessão confere um risco 
+de dados sensíveis quando o computador é publico.
+
+	-- Contramedida: O responsável pela aplicação do serviço poderia ter alguma medida 
+de alerta que avisasse ao usuario para fazer o logout da sua conta   
+	--navegador poderia ter uma extensão que alertasse ao usuario para fazer o logout
+da sua conta. 
+	--Por que não poderia fazer que o cookie desconectasse da sessão sempre ao sair?--
+	- pq essa é a função do cookie. Ser funcional e prático com menor intervenção 
+do usuário comum possivel. 
+
+--> Cache: automação para processos mais frequentes no navegador. 
+	Ex: uma informação repetida, uma requisição repetida, carregamento de paginas... 
+
+
+
+Plugins - > complemento do navegador. O navegador vem com certas "bibliotecas" que vem por padrão. Os plugins é um complemento adicional do navegador.  
+ex: 
+	1) web socket API. Conexão entre o navegador e o servidor. 
+    	2) ActiveX API. Criada pela Microsoft para proporcionar que uma aplicação tenha alto nivel de privilegio no computador cliente possibilitando a 	leitura de dispositivos USB.
+    	3) Adobe Flash Player, Acrobat Reader 
+
+
+
+	  		              	    -- > Broken Authentication = "quebra de autenticação" < -- 
+       
+       - > brutalforce == quebrar a senha de um determinado usuário através da repetiçaõ de senhas 
+	
+       - > cookies roubados == cookie é responsável por manter a sessão (login). Quando terceiros possuem esta informação, conseguem entrar na conta		(sessão) de um usuário sem precisar do usuário ou senha.    
+	
+       - > http == usar sites que não possuem criptográfia (o texto é enviado ao servidor em texto puro). Neste caso, o usuário é passivo de um ataque m	an-in-the-middle ( MITM ) onde o atacante pode está interceptando todo tráfego.   
+	
+       - > sqlinjection == injeção de código a fim de encontrar vulnerabilidades/falhas na programação de um site ou formulário. Vulnerabilidades nessa 	categoria retornam informações de cookies, usuários, senhas no banco de dados do servidor. É uma falha de segurança que explora a entrada de 		parâmetros. exemplo: XSS injetar codigo html, javascript, roubar cookies da vitima. 
+	
+					contramedidas -- > salvar senhas em hashing 
+
+-- > XXE "não filtrar o xxe no parsing do xml"
+
+	               
+	                                      -- > broken acess Control (controle de acesso) < --
+	
+	- > ex: um usuário consegue deletar fotos de outros usuarios em uma rede social. Ou seja, você faz referencia direta a um outro objeto e ele é 		executado no server side (servidor). Existe uma falha/vulnerabilidade no controle de acesso. Quem controla de fato essa foto? 
+
+					    -- > Security Miscofiguratior má configuração < -- 
+
+	
+			                	   -- > Insecure Deserialization < -- 
+		
+		- > conversão de objeto para bytes e bytes para objeto se feita de forma insegura, permite injeção de código
+
+-- > Ataque de dóminio cruzado:
+	- São serviços externos como API que possuem vulnerabilidades. Falhas na aplicação, padronização, controle de acesso, autenticação, tratamento de entrada.
+	
+	
+			----->>Fraca proteção aos dados<<------  
+	-- > insufficient logginemonitorin falta de politicas de segurança 
+	firewall, ids, ips, criptografia, utilização de http, falta de ofuscação de dados.
+   
+	-->> Componentes ( que complementa a biblioteca do google ) 
+	--> Falha no desenvolvimento do navegador. Ou a importação de plugisn e extensões maliciosas.
+	--> procurar plugins e extensões maliciosas.
+
+
+
+
+https://owasp.org/
+https://owasp.org/www-pdf-archive/OWASP_Top_10-2017-pt_pt.pdf
+https://www.sans.org/top25-software-errors/
+
