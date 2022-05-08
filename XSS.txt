@@ -90,3 +90,5 @@ Retomando no caso supracitado do cliente dia zero.
 	- O cliente antes de receber qualquer arquivo da internet, subirá este arquivo em uma maquina virtual ( nuvem ) e observará o comportamento no sistema operacional linux ou windows. Será observado os processos, registros e toda árvore de execução do programa.     
  
 -------------------------------------------------------
+
+xss.txt -> Capítulo Especial de Carlos Marcelo, página 487. livro: Exploração em redes tcp/ip de Sandro Melo.
