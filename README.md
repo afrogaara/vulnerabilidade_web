@@ -1,7 +1,7 @@
 #Vulnerabilidades web 
 
 #Descrição dos projetos 
-- > cada commit será um assunto referente a vulnerabilidade web. Todas as referências aqui e ao final de cada commit.txt.
+- > cada commit será um assunto ( anotações/resumos/aprendizados )  referente a vulnerabilidades web. Todas as referências aqui e ao final de cada commit.txt.
 
 
 
