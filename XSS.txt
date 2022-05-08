@@ -1,23 +1,26 @@
 
-  
-		                          Cliente <----- Servidor 
-	                            HTML é "renderizado" pelo navegador.   
-                                        navegador <------- servidor 
-	         O navegador: 
-	Controla requisições(request)
-	Controla as respostas(response)  
+  							Conceitos básicos:
 
-https -p 443
-http -p 80 
+		https 443 
+		http 80 
+					  
+						      Cliente <----- Servidor 
+	   				HTML é "renderizado" pelo navegador quando chega no cliente    
+               					    navegador <------- servidor 
+	         				No navegador: 
+				Controla requisições(request)
+				Controla as respostas(response)  
 
----- > No web application há o server side e o client side e existe vulnerabilidades injection para os dois. 
 
-Injeção de Códigos: 
+
+--- > Por que existem tantas vulnerabilidades de injeção? 
+	-Quando falamos de aplicações web falamos do server side e o client side e existe tecnicas de exploração de falhas em ambos. 
+injeção de código XSS: 
 
 	----- > ( Cross-site Scripting XSS ) 
 	
-	-- > Utiliza o JS do navegador e permite que o atacante ( executor ) envie dados não confiáveis para o servidor.
-        isso acontece por falta de validação de dados na entrada, o navegador acaba permitindo a execussão do código malicioso. <--
+	--> Utiliza o JS do navegador e permite que o atacante ( executor ) envie dados não confiáveis para o servidor.
+        --> isso acontece por falta de validação de dados na entrada, o navegador acaba permitindo a execussão do código malicioso. <--
   
 	-- > parâmetros de uma URL são alterados para um código malicioso e encaminha para a vítima. O navegador no computador da vítima interpreterá os 	códigos injetados. 
 	ex: http://www.meuforum.com/?p=abc
@@ -26,14 +29,12 @@ Injeção de Códigos:
 
 3 tipos de XSS:
    --- >> 1) Persistente.
-   --- >> Vai acontecer no formulário ( onde acontece a conexão da API cliente-servidor ) a inserção de código 		malicioso que fará uma requisição ao banco de dados ( servidor ) que trará resultado ( persiste ) e pode ser 	     retornando um valor ( recuperado por qualquer usuário da aplicação ). 
-	--- >> exemplo do livro:
+   --- >> Vai acontecer no formulário ( onde acontece a comunicação da API com o cliente-servidor ) a inserção de código 		malicioso que fará uma requisição ao banco de dados ( servidor ) que trará resultado ( persiste ) e pode ser 	     retornando um valor ( recuperado por qualquer usuário da aplicação ). 
+	--- >> exemplo:
 		<script>alert("XSS");</script>
 Consequências:
-	--- >> a consequência mais crítica do xss é o roubo de cookies para logar na sessão do usuário.
+	--- >> a consequência mais crítica do xss é o roubo de cookies para logar na sessão de login do usuário.
 		ex para pesquisar: Samy Kankar 
-	contramedida do navegador para injeção de código XSS:
-		-- > Content Security Policy (CSP) diz respeito quais parametros são permitidos ou não para serem processados em uma requisição. O desenvolvedor do site pode restrinjir os parâmetros que serão utilizados em uma determinada pagina na sua URL. 
 	
 1) Forma direta: 
 	exemplo: 
@@ -42,7 +43,7 @@ Consequências:
 		"&ltb&gtTeste&lt/b&gt"
 		
 --- >> Técnicas de defesa: << ---
-	1 ) -- utilização de regras de segurança ou um IPS que fará uma audiotira no código, interceptando as requisições antes do response do servidor. 
+	1) Analisar todas as requisições feitas pelos computadores. Seria feita uma interceptação da requisição antes de ir para internet. 
 
 	2 ) -- Proxy reverso. 
 	cliente -------------- >> proxy reverso ------------- >> internet -------------------- >> servidor  
@@ -52,8 +53,8 @@ Consequências:
 	
 	cliente --------------- >> internet ---------------- >> servidor
 	cliente << --------------- internet << ---------------- servidor 
-	------>	Durante a renderização da página no navegador do cliente, acontecerá o monitoramento de código JavaScript, e 
-	possibilitanto uma resposta de execução ou não de um determinado processamento. ( É uma técnica boa quando utilizada em conjunto com outras 
+	--- >	Durante a renderização da página no navegador do cliente, acontecerá o monitoramento de código JavaScript, e 
+	possibilitanto uma resposta de execução ou não da página. 
 
 
 Proxy: 
@@ -66,12 +67,26 @@ Proxy:
 	-> o Servidor pode filtrar ou não essa requisição feita pelo proxy
 	uma vez que é um serviço terceiro.
 
---> burpsuit é um proxy. Você faz a requisição e a requisição passa pelo burp que também altera a resposta do servidor para o cliente. 
+	exemplos de proxy: burpsuit é um proxy. Você faz a requisição e a requisição passa pelo burp que também altera a resposta do servidor para o cliente. 
 
+--> contramedida do navegador para injeção de código XSS:
+		-- > Content Security Policy (CSP) diz respeito quais parametros são permitidos ou não para serem processados em uma requisição. O desenvolvedor do site pode restrinjir os parâmetros que serão utilizados em uma determinada pagina na sua URL. 
 
 --> Sandbox é uma politica de segurança. Testa, Execura e bloqueia. 
 	Sandbox surge como uma necessidade de substituir os antivírus. Os desenvolvedores perceberam com o tempo que a tecnica utilizada de assinaturas ( um determinado software possuirá cógidos maliciosos e irá comparar esse código com outro software ) não estava sendo mais eficaz. 
 
+	
+------------------------------------------------------	
 	-> Qual problema que o sandbox resolve?
 	
-	cliente possui um antivírus com "n" assinaturas. Entretanto, ele é infectado por uma vírus que o antimalware não possuia essa assinatura. Logo, ele é infectado. 
+							Entendendo dia zero:	
+	* um cliente possui um antivírus com "n" assinaturas. Entretanto, ele é infectado por uma vírus que o antimalware não possuia em sua assinatura. Logo, ele é infectado. O antivírus instalado no computador da vítima, enviará para uma nuvem inteligente séries de logs sobre o novo vírus onde profissionais irá analisar o ocorrido. Desta forma, uma atualização acontecerá no antivírus para proteger os computadores da nova ameaça.
+ 	- >O cliente infectado a primeiro momento com este vírus não consegue fugir das consequências provocadas pelo malware antes da atualização do software protetor. Logo, este cliente é o dia zero. < -
+	
+						Como resolver o problema deste cliente? 
+							   resposta: Sandbox.
+						
+Retomando no caso supracitado do cliente dia zero. 
+	- O cliente antes de receber qualquer arquivo da internet, subirá este arquivo em uma maquina virtual ( nuvem ) e observará o comportamento no sistema operacional linux ou windows. Será observado os processos, registros e toda árvore de execução do programa.     
+ 
+-------------------------------------------------------
