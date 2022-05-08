@@ -1,0 +1,12 @@
+reconhecimento web: 
+
+muitos sites oferecem o /sitemap.xml para o google indexar melhor.
+- > url/sitemap.xml
+
+- > url/robots.txt 
+	return 
+		disallow: /admin ( disallow ) não retorne /url nos resultados de pesquisas 
+  
+- > utilizar ferramentas para procurar diretorios 
+      - dirb url -v (modo verbose) -c cookie -a user-agent
+ 
