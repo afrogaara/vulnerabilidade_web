@@ -13,9 +13,9 @@ Exemplo de uso de um banco de dados msql:
 		------------------------
 			Database 
 		------------------------
-		+alguma coisa1 
-		+alguma coisa2 
-		+alguma coisa3 
+		+algumacoisa1 
+		+algumacoisa2 
+		+algumacoisa3 
 	
 	- > use algumacoisa1; ( "use o bancodedados algumacoisa1" ) e ele usará o banco de dados escolhido 
 	- > show tables; ( retornará as tabelas que aquele banco de dados possui 
@@ -39,15 +39,17 @@ Exemplo de uso de um banco de dados msql:
 		------------------------------------
 		2 emails: <p> email: cristina@teste.com </p>
 
+- > pegamos agora a url http://www.bancocn.com/cat.php?id=1 como exemplo. < - 
 
-
---> ( Injeção SQL )
+- > ( Injeção SQL )
  - É uma falha que explora o tratamento de entrada nos formulários através da manipulação de parâmetros da URL (GET) ou formulários (POST), os quais enviam informações que alimentam o bando de dados SQL.
  - Conteúdo injetado: 
 	', 
-TIPOS: 
+-------------------------------------------------	TIPOS DE SQLinjection:      ----------------------------------------------------- 
+
 1 ) IN-BAND SQLi (SQLI Clássico)
 	-> feito diretamente na url.
+
 
 2 ) Union 
 	- > nesse ataque o atacante vai unir ( combinar ) diferentes injeções 
@@ -56,17 +58,32 @@ TIPOS:
 		cat.php?id = 1 order by 1-- ( -- é um comentário ) 
 		cat.php?id = 1 order by 2--
 		order by ( ordene pela coluna )
+		ordene pela coluna by x* até retornar: Unknown column 'x*' in 'order clause' ( assim, você saberá quantas colunas aquele banco de dados possui ) 
+		
+	observação: No exemplo supracitado, é o mesmo que fazer uma consulta no banco de dados:  
 	
-	observação: No exemplo supracitado, é o mesmo que fazer uma consulta:  
+	Como seria a consulta no banco de dados pelos parametros de injeção: 					
 	
-	- > select * from users where teste="emails"; 				-> select * from users order by 2 
+	1 ) show databases; ( mostre os banco de dados ) 
+	2 ) use algumacoisa1; ( use o banco de dados escolhido ) 
+	3 ) show tables; ( mostre as tabelas que o banco escolhido possui ) 
+	
+	- > select * from users where teste="emails"; 				- > select * from users order by 2 
 		return 									return
 		
-		id teste					OR  			id teste 
+		id teste				      	OR  			id teste 
 		------------------------------------					---------------------------------------
 		2 emails: <p> email: cristina@teste.com </p>				2 emails: <p> email: cristina@teste.com </p>
 
 
+	- > Feito os passos a cima iremos fazer um ataque baseado em union: 
+		fazendo injeção na url: 
+			cat.php?id = 1 union select 1		
+			observação: 1 union select 1, 2, 3, 4... ( também é uma forma de descobrir quantas colunas o banco de dados possui ) 
+			Por que é um ataque baseado em union ? 
+				usamos 2 select. O primeiro próprio do parametro e o segundo que passamos manualmente.
+			return
+	  	You have an error in your SQL syntax; 
 
 3 ) Error-based SQLi ( ataque baseado no erro ) 
 	-> No ambiente de produção ( usuário final ), ou seja, o produto final de um programa para o cliente terá que retornar o mínimo de erros possiveis.
