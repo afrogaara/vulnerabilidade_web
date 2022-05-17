@@ -1,0 +1,112 @@
+O que é SQL? é uma linguagem de programação. 
+	->banco de dados feitos em sql: msql, postgresql, sqlserver, oracle
+	->Comandos de consultas no banco de dados: 
+	
+		- > SELECT - seleciona dados < -
+		- > DELETE - deleta dados    < -
+		- > UPDATE - atualiza dados  < -
+		- > INSERT - insere dados    < -
+
+Exemplo de uso de um banco de dados msql: 
+	- >show databases; retorna o banco de dados do servidor 
+	ex : 
+		------------------------
+			Database 
+		------------------------
+		+alguma coisa1 
+		+alguma coisa2 
+		+alguma coisa3 
+	
+	- > use algumacoisa1; ( "use o bancodedados algumacoisa1" ) e ele usará o banco de dados escolhido 
+	- > show tables; ( retornará as tabelas que aquele banco de dados possui 
+	ex:
+		------------------------
+		    tables_no_banco
+		------------------------ 
+		+users 
+		+pictures 
+		+categories
+		+stats 
+		
+	- > select * from users; ( return tudo que uma table possui ) 
+		id teste 
+		--------------------------------------
+		1 users: <p> cristina_do_arrocha </p>
+		--------------------------------------
+		2 emails: <p> email: cristina@teste.com </p>
+	- > select * from users where teste="emails"; 
+		id teste 
+		------------------------------------
+		2 emails: <p> email: cristina@teste.com </p>
+
+
+
+--> ( Injeção SQL )
+ - É uma falha que explora o tratamento de entrada nos formulários através da manipulação de parâmetros da URL (GET) ou formulários (POST), os quais enviam informações que alimentam o bando de dados SQL.
+ - Conteúdo injetado: 
+	', 
+TIPOS: 
+1 ) IN-BAND SQLi (SQLI Clássico)
+	-> feito diretamente na url.
+
+2 ) Union 
+	- > nesse ataque o atacante vai unir ( combinar ) diferentes injeções 
+	exemplo: 
+		fazendo injeção na url 
+		cat.php?id = 1 order by 1-- ( -- é um comentário ) 
+		cat.php?id = 1 order by 2--
+		order by ( ordene pela coluna )
+	
+	observação: No exemplo supracitado, é o mesmo que fazer uma consulta:  
+	
+	- > select * from users where teste="emails"; 				-> select * from users order by 2 
+		return 									return
+		
+		id teste					OR  			id teste 
+		------------------------------------					---------------------------------------
+		2 emails: <p> email: cristina@teste.com </p>				2 emails: <p> email: cristina@teste.com </p>
+
+
+
+3 ) Error-based SQLi ( ataque baseado no erro ) 
+	-> No ambiente de produção ( usuário final ), ou seja, o produto final de um programa para o cliente terá que retornar o mínimo de erros possiveis.
+	Neste tipo de ataque, é analisado todos os erros retornados a fim de obter informações sensíveis do banco de dados. 
+	
+	ex: dominio/cat.php?id=1        dominio/cat.php?id='
+	    dominio/cat.php?id=2	dominio/cat.php?id='
+	    dominio/cat.php?id=3 	dominio/cat.php?id='
+	dominio/cat.php?id='teste
+	* passagem de parametros por id 
+
+	return 
+		"you have an error in your SQL syntax" 
+		"you have an error in your SQL syntax 'teste' --- > o parametro teste foi injetado 
+	observação: os parametros passados por id não significa que o site é vulnerável (é funcionamento normal de um site) ou não, depende do programador. 
+	usando google dorks ( google hacking ) para tentar pesquisar sites vulneráveis.
+	exemplos:
+		inurl:'.php?id=' 
+		inurl:'.asp?id='
+		inurl:'.aspx?id='
+	
+4 ) inferential SQLi (Blind SQLi)
+	-> análise do comportamento da resposta do servidor.
+
+5 ) Boolean-based Blind SQLi
+	-> resposta do servidor baseadas em SIM OU NÃO, 0 ou 1, TRUE OR FALSE. E, através das respostas fazer uma analise da resposta do servidor. 
+
+6 ) Time-based Blind SQLi 
+	-> nesse tipo de ataque é analisado o tempo de resposta do servidor. 
+	resposta imediata: False
+	resposta demorada: True
+	( é necessário automação ) 
+	
+7 ) Out-of-band SQLi 
+	-> É o ataque menos comum. É um ataque de pós exploração. O servidor atuará como cliente e o atacante atuará como servidor. 
+	
+	
+	
+--- > aprender sql para iniciantes < ---
+	- > https://www.codecademy.com/catalog/language/sql
+	- > https://www.sqlcourse.com/beginner-course/
+	
+	

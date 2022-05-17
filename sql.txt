@@ -1,6 +1,0 @@
---> ( Injeção SQL )
- - É uma falha que explora o tratamento de entrada nos formulários através da manipulação de parâmetros da URL (GET) ou formulários (POST), os quais enviam informações que alimentam o bando de dados SQL.
- - Conteúdo injetado: 
-	- "", '', --.
- Principais técnicas de defesa:
-	- São as mesmas que podem ser usadas às aplicadas para XSS. 
