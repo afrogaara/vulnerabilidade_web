@@ -270,3 +270,5 @@ Exemplo de uso de um banco de dados msql:
 	--risk=3 --level=5 - > aumentar os testes e "agressividade" do sqlmap aumentando a possibilidade do ataque de ser visto.
 	--skip-waf - > desativa o scanner que o sqlmap faz do waf por padrão. 
 	--is-dba
+
+ ---------------------------------------------- 						------------------------------------------------------
