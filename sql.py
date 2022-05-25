@@ -3,11 +3,6 @@ import requests
 import sys 
 import copy 
 
-#Aprimore o scan para fazer buscas por dorks no Google
-#Aprimore o scan para detectar outros erros de SQLi
-#Aprimore o scan para detectar outros tipos de SQLi
-
-
 headers = dict()
 
 def cabecalho(headers):
@@ -47,20 +42,21 @@ def requisicao(URL, headers):
 
 
 def vuln(html):
-    if "You have an error in your SQL syntax;" in html:
-        print("sssss")
+    if "Warning: mysql" in html:
+        print("é vulneravel")
 
 
-url = 'http://www.bancocn.com/cat.php?id=1'
+
 
 if __name__=="__main__":
+    url = sys.argv[1]
     headers = cabecalho(headers)
     objeto_python, parse_url = parsing(url)  
     URL = injection(objeto_python, parse_url)
     html = requisicao(URL, headers)
+    
     vuln(html)
     
-
 
 
 
