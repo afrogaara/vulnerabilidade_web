@@ -51,8 +51,9 @@ Na prática:
 	
 	ápos interceptar o cookie podemos utilizar o burpsuit para manipulação de cookie. 
 	Dica: Podemos verificar a injeção sqlinjection nos cookies usando sqlmap ou manualmente. 
-		se o cookie possuir o parametro
-	
+		exemplo:
+		cookie=PHPSESSID=0ot6tnhbrjolnoqkjmh75kra85;%20googtrusername=admin;%20uid=1 HTTP/1.1
+		id='
 
 --- >> Técnicas de defesa: << ---
 	1) Analisar todas as requisições feitas pelos computadores. Seria feita uma interceptação da requisição antes de ir para internet. ( proxy )  
