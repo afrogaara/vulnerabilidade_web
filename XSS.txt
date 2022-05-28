@@ -26,7 +26,11 @@ injeção de código XSS:
 	ex:
 	<script>alert("teste")</script>
 	<script>alert("Cookies which do not have the HTTPOnly attribute set: " + document.cookie);</script>
-				
+
+sites que podem ser usados para fazer o bypass do XSS: 
+	-- > https://cheatsheetseries.owasp.org/cheatsheets/XSS_Filter_Evasion_Cheat_Sheet.html
+	-- > https://products.aspose.app/html/pt/url-encoding
+	-- > https://meyerweb.com/eric/tools/dencoder/
 
 3 tipos de XSS:
    --- >> 1) Persistente.
