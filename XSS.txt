@@ -109,3 +109,6 @@ Retomando no caso supracitado do cliente dia zero.
 -------------------------------------------------------
 
 xss.txt -> Capítulo Especial de Carlos Marcelo, página 487. livro: Exploração em redes tcp/ip de Sandro Melo.
+
+bypass XSS: 
+- > https://github.com/payloadbox/xss-payload-list
