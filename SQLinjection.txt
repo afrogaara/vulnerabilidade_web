@@ -317,8 +317,8 @@ Exemplo de uso de um banco de dados msql:
         obs: Sqlmap também pode ser usado para fazer injeções sqlinjection nos cookies. Adiciona os cookies e passa como parametro -p cookies.       
 	 
 	      
-	      
-	      
+
+
 	      ----------------------------------------------    Shell upload 	------------------------------------------------------
 	- > Faze pós exploração. Após ter conseguido o banco de dados, tabelas, colunas, admin e senha. 
 		- Nada mais é do que fazer a página invadida executar comandos que serão executados no servidor - 
@@ -377,3 +377,6 @@ Exemplo de uso de um banco de dados msql:
 	random_chain
 	adicionar socks - > https://spys.one/en/
 	proxychains4 sqlmap 
+-------------------------------
+Bypass SQLinjection: 
+- > https://github.com/payloadbox/sql-injection-payload-list
