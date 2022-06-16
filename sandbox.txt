@@ -3,13 +3,13 @@
 ------------------------------------------------------	
 	-> Qual problema que o sandbox resolve?
 	
-							Entendendo dia zero:	
-	* um cliente possui um antivírus com "n" assinaturas. Entretanto, ele é infectado por uma vírus que o antimalware não possuia em sua assinatura. Logo, ele é infectado. O antivírus instalado no computador da vítima, enviará para uma nuvem inteligente séries de logs sobre o novo vírus onde profissionais irá analisar o ocorrido. Desta forma, uma atualização acontecerá no antivírus para proteger os computadores da nova ameaça.
- 	- >O cliente infectado a primeiro momento com este vírus não consegue fugir das consequências provocadas pelo malware antes da atualização do software protetor. Logo, este cliente é o dia zero. < -
+					       		Entendendo dia zero:	
+	um cliente possui um antivírus com "n" assinaturas. Entretanto, ele é infectado por uma vírus que o antimalware não possuia em sua assinatura. Ou seja, um malware desconhecido. Logo, ele é infectado e prejudicado. O antivírus instalado no computador da vítima, enviará para uma nuvem inteligente séries de logs sobre o novo vírus onde profissionais irá analisar o ocorrido. Desta forma, uma atualização acontecerá no antivírus para proteger outros computadores não infectados pela nova ameaça.
+ 	- > Entretanto, o cliente infectado a primeiro momento com este vírus não consegue fugir das consequências provocadas pelo malware antes da atualização do software protetor. Logo, este cliente é o dia zero. < -
 	
 						Como resolver o problema deste cliente? 
 							   resposta: Sandbox.
 						
 Retomando no caso supracitado do cliente dia zero. 
-	- O cliente antes de receber qualquer arquivo da internet, subirá este arquivo em uma maquina virtual ( nuvem ) e observará o comportamento no sistema operacional linux ou windows. Será observado os processos, registros e toda árvore de execução do programa.     
+	- O cliente antes de receber qualquer arquivo da internet, subirá este arquivo em uma maquina virtual ( nuvem ) e observará o comportamento no sistema operacional linux ou windows. Será observado os processos, registros e toda árvore de execução do programa antes de baixar o arquivo no computador.      
  
